@@ -88,17 +88,6 @@ void ABalance::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*if (MainCharacter && MainCharacter->bIsHoldingThrowable)
-	{
-		if (bIsMainCharacterOnPlate1)
-		{
-			Plate1Mass += ThrowableMass;
-		}
-		else if (bIsMainCharacterOnPlate2)
-		{
-			Plate2Mass += ThrowableMass;
-		}
-	}*/
 	float FixedMassGapRange = UKismetMathLibrary::Clamp(Plate1Mass - Plate2Mass, -MassGap, MassGap);
 	float NormalizedRange = FixedMassGapRange * (20 / MassGap);
 	float InterpSpeed = 2.0f;
@@ -111,7 +100,6 @@ void ABalance::Tick(float DeltaTime)
 
 float ABalance::AddMassOnPlate(float Mass, AActor* OtherActor)
 {
-	//AMainCharacter* MC = Cast<AMainCharacter>(OtherActor);
 	if (Cast<AMainCharacter>(OtherActor))
 	{
 		Mass += MainCharacterMass;
@@ -126,7 +114,6 @@ float ABalance::AddMassOnPlate(float Mass, AActor* OtherActor)
 
 float ABalance::SubMassOnPlate(float Mass, AActor* OtherActor)
 {
-	//AMainCharacter* MC = Cast<AMainCharacter>(OtherActor);
 	if (Cast<AMainCharacter>(OtherActor))
 	{
 		Mass -= MainCharacterMass;
@@ -142,23 +129,19 @@ float ABalance::SubMassOnPlate(float Mass, AActor* OtherActor)
 void ABalance::OnBox1OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Plate1Mass = AddMassOnPlate(Plate1Mass, OtherActor);
-	UE_LOG(LogTemp, Log, TEXT("Plate1Mass After Add : %f"), Plate1Mass)
 }
 
 void ABalance::OnBox1OverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	Plate1Mass = SubMassOnPlate(Plate1Mass, OtherActor);
-	UE_LOG(LogTemp, Log, TEXT("Plate1Mass After Sub : %f"), Plate1Mass)
 }
 
 void ABalance::OnBox2OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Plate2Mass = AddMassOnPlate(Plate2Mass, OtherActor);
-	UE_LOG(LogTemp, Log, TEXT("Plate2Mass After Add : %f"), Plate2Mass)
 }
 
 void ABalance::OnBox2OverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	Plate2Mass = SubMassOnPlate(Plate2Mass, OtherActor);
-	UE_LOG(LogTemp, Log, TEXT("Plate2Mass After Sub : %f"), Plate2Mass)
 }

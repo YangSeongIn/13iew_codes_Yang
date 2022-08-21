@@ -12,10 +12,6 @@ void UMultiSlotWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//BackButton = Cast<UButton>(GetWidgetFromName(TEXT("BackButton")));
-	//BackButton->OnClicked.AddDynamic(this, &UMultiSlotWidget::BackToMainMenu);
-
-
 	Widget_Slot_1->SlotIndex = 1;
 	Widget_Slot_2->SlotIndex = 2;
 	Widget_Slot_3->SlotIndex = 3;
@@ -23,8 +19,6 @@ void UMultiSlotWidget::NativeConstruct()
 	Widget_Slot_2->SlotName = FString("Slot2");
 	Widget_Slot_3->SlotName = FString("Slot3");
 
-	//BackButton->SlotIndex = -1;
-	//BackButton->SlotName = FString("Back");
 
 	BackButton->OnHovered.AddDynamic(this, &UMultiSlotWidget::OnHovered);
 	BackButton->OnUnhovered.AddDynamic(this, &UMultiSlotWidget::OnUnHovered);

@@ -15,8 +15,6 @@ void ALevel2LevelScriptActor::BeginPlay()
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
 
 	GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	/*GameInstance->LoadGame();
-	GameInstance->LoadData();*/
 	GameInstance->SaveData();
 
 	MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));

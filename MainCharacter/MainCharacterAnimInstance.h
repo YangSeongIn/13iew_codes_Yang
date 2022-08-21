@@ -96,16 +96,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 		bool bIsAttachedAtPullBoard;
-	/*UPROPERTY(BlueprintReadWrite, Category = "PullBoard")
-		bool bIsPullingBoard;
-	UPROPERTY(BlueprintReadWrite, Category = "PullBoard")
-		bool bIsLeftHandPullBoard;
-	UPROPERTY(BlueprintReadWrite, Category = "PullBoard")
-		bool bIsRightHandPullBoard;
-	UPROPERTY(BlueprintReadWrite, Category = "PullBoard")
-		FVector IKPullBoardLeftHandEffector;
-	UPROPERTY(BlueprintReadWrite, Category = "PullBoard")
-		FVector IKPullBoardRightHandEffector;*/
 
 	void FootPlacement();
 	TTuple<bool, float> Dis(FName SocketName);

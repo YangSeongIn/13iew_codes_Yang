@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -16,7 +15,6 @@
 #include "Interface_MainCharacterInfo.h"
 #include "Components/PostProcessComponent.h"
 #include "Interface_InteractWithWidget.h"
-//#include "Interface_ThrowableObjects.h"
 #include "Components/SpotLightComponent.h"
 
 // mj
@@ -572,26 +570,6 @@ public:
 	void ClimbLadderSide(float DeltaTime);
 
 	void CountTimeToEnableGrabLadder(float DeltaTime);
-
-	//bool GetIsOnLadderTop();
-	//void ClimbLadderOneCycle();
-	//void StopClimbing();
-	//void ToggleLHandIK(bool b, FVector v);
-	//void ToggleRHandIK(bool b, FVector v);
-
-	//float GetLHandIKAlpha();
-	//float GetRHandIKAlpha();
-	//FVector GetLHandIKEffector();
-	//FVector GetRHandIKEffector();
-	//void SetMAxisLadder(int a);
-
-	//void CheckLadderTop();
-
-	//void SetIsOnLadderTop(bool B);
-	//void EndClimbingLadder();
-
-	////test
-	//void ClimbByStep(float DeltaTime);
 
 	UPROPERTY(VisibleAnywhere)
 		AActor* OwnLadder;

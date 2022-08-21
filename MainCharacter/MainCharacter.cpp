@@ -1,7 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "MainCharacter.h"
+﻿#include "MainCharacter.h"
 #include "Master_InteractableObject.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -222,7 +219,6 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	// Yang
-
 	bIsDefaultState = bIsControllable && !bIsGrabbingThrowable && !bIsOnPole && !bIsAttachedAtMovable && !bIsSliding && !bIsHangingRope && !bIsOnLedge && !bIsCrouching && !bIsOnLadder && !bIsOnPulley;
 	bIsDefaultStateNotIncludingCrouching = bIsControllable && !bIsGrabbingThrowable && !bIsOnPole && !bIsAttachedAtMovable && !bIsSliding && !bIsHangingRope && !bIsOnLedge && !bIsOnLadder && !bIsGrabbingPulley;
 	if (!bIsDefaultState || bIsFalling)
@@ -253,8 +249,6 @@ void AMainCharacter::Tick(float DeltaTime)
 	ClimbLadderSide(DeltaTime);
 	EndLadderTop();
 	CountTimeToEnableGrabLadder(DeltaTime);
-	//CheckLadderTop();
-	//ClimbByStep(DeltaTime);
 	KeepGrabbingPulley();
 	GrabPulley(bIsPressLMB);
 	RollLockWheel(DeltaTime);
@@ -293,12 +287,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	// Interaction
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::StopInteract);
-	// CameraShake
-
-
-
-	//mj
-	//PlayerInputComponent->BindAction("InputKeyboardF", IE_Pressed, this, &AMainCharacter::InputKeyboardF);
 }
 
 void AMainCharacter::TestDie()
@@ -359,7 +347,6 @@ void AMainCharacter::MoveForward(float AxisValue)
 					AddMovementInput(Direction, AxisValue);
 				}
 			}
-			//mj
 			else if (bIsOnLadder)
 			{
 				bool bIsOnLadTop = false;
@@ -379,10 +366,6 @@ void AMainCharacter::MoveForward(float AxisValue)
 				{
 					AxisClimbing = AxisValue;
 				}
-
-				//FVector FwVec = Lad->GetForwardVector();
-
-				//AddMovementInput(FwVec * (AxisValue > 0 ? 1 : -1) + FVector(0.f, 0.f, 1.f), (AxisValue > 0 ? 1: -1) * 0.2);
 			}
 			else if (bIsOnPulley)
 			{
@@ -438,7 +421,6 @@ void AMainCharacter::MoveRight(float AxisValue)
 			if (!Cast<ALadder>(OwnLadder)->GetIsEnableSideMove())
 				return;
 		}
-		//---
 
 		YAxisValue = AxisValue;
 		if (AxisValue != 0.0f)
@@ -470,7 +452,6 @@ void AMainCharacter::MoveRight(float AxisValue)
 					AddMovementInput(Direction, AxisValue);
 				}
 			}
-			//mj
 			else if (bIsOnLadder)
 			{
 				bool bIsOnLadTop = false;
@@ -493,9 +474,8 @@ void AMainCharacter::MoveRight(float AxisValue)
 			}
 			else if (bIsOnPulley)
 			{
-				// prevent rotation
+
 			}
-			//--
 			else if (bIsAttachedAtPullBoard)
 			{
 
@@ -529,9 +509,7 @@ void AMainCharacter::MoveRight(float AxisValue)
 		else if (bIsOnLadder)
 		{
 			AxisSideClimbing = 0.0f;
-			//CharacterMovementComponent->StopMovementImmediately();
 		}
-		//--
 	}
 }
 
@@ -571,26 +549,7 @@ void AMainCharacter::CheckEdgeSlip()
 {
 	if (bIsSprinting && !bIsFalling)
 	{
-		/*FVector StartLoc = TriggerCapsuleComponent->GetRelativeLocation() + TriggerCapsuleComponent->GetForwardVector() * 30.0f + FVector(0.0f, 0.0f, -60.0f);
-		FVector EndLoc = StartLoc;
-		TArray<AActor*> ToIgnore;
-		FHitResult OutHit;
-		bool bIsThrowable = UKismetSystemLibrary::SphereTraceSingle(
-			GetWorld(),
-			StartLoc,
-			EndLoc,
-			10.0f,
-			ETraceTypeQuery::TraceTypeQuery1,
-			false,
-			ToIgnore,
-			EDrawDebugTrace::Persistent,
-			OutHit,
-			true);
-		if (!bIsThrowable)
-		{
-			PlayAnimMontage(M_EdgeSlip);
-			bIsControllable = false;
-		}*/
+
 	}
 }
 
@@ -878,8 +837,6 @@ void AMainCharacter::LeftMouseButtonPress()
 
 	// mj - ladder
 	GrabLadder(true);
-	// mj - pulley
-	//GrabPulley(true);
 	// mj - numberlock
 	ClickLockWheel(true);
 
@@ -894,8 +851,6 @@ void AMainCharacter::LeftMouseButtonRelease()
 
 	// mj - ladder
 	GrabLadder(false);
-	// mj - pulley
-	//GrabPulley(false);
 	// mj - numberlock
 	ClickLockWheel(false);
 }
@@ -1081,14 +1036,10 @@ void AMainCharacter::CrouchManager()
 			if (bIsFP && UKismetMathLibrary::NearlyEqual_FloatFloat(TriggerCapsuleComponent->GetScaledCapsuleHalfHeight(), CrouchHeight, 0.01f))
 			{
 				SmoothCrouchCurveTimeline->Reverse();
-				//bIsCrouching = false;
-				//bIsHiding = false;
 			}
 			else if (!bIsFP && UKismetMathLibrary::NearlyEqual_FloatFloat(TriggerCapsuleComponent->GetScaledCapsuleHalfHeight(), CrouchHeight, 0.01f))
 			{
 				UnCrouch();
-				//bIsCrouching = false;
-				//bIsHiding = false;
 			}
 			bIsCrouching = false;
 			bIsHiding = false;
@@ -2499,12 +2450,6 @@ void AMainCharacter::GrabLadder(bool b)
 					float Offset = Cast<ALadder>(OwnLadder)->GetGrabHeightOffset();
 					float Gap = Cast<ALadder>(OwnLadder)->GetBarGap();
 
-					//this->SetActorLocation(FVector(OwnLadder->GetActorLocation().X - 20.f, OwnLadder->GetActorLocation().Y/* + 5.f*/, OwnLadder->GetActorLocation().Z + Cast<ALadder>(OwnLadder)->GetGrabHeightOffset()));
-
-
-
-					// calc grap height
-
 					float hDiff = this->GetActorLocation().Z - LLoc.Z - HOffset; //64.15
 					if (hDiff < 0)
 						hDiff = 0;
@@ -2512,14 +2457,10 @@ void AMainCharacter::GrabLadder(bool b)
 					int hGapCount = (int)(hDiff / Gap) + 1;
 
 					float hGap = Gap * hGapCount;
-
-					//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Orange, FString::Printf(TEXT("hDiff : %f, hGapCount : %d, hGap : %f"), hDiff, hGapCount, hGap));
-
 					FLatentActionInfo Info;
 					Info.CallbackTarget = this;
 					if (Cast<ALadder>(OwnLadder)->GetIsEnableSideMove())
 					{
-						//this->SetActorLocation(SLoc - LFwVec * 15.f + FVector(0, 0, Cast<ALadder>(OwnLadder)->GetGrabHeightOffset() + Offset + Gap * 0.5f + hGap));
 						UKismetSystemLibrary::MoveComponentTo
 						(
 							TriggerCapsuleComponent,
@@ -2549,29 +2490,8 @@ void AMainCharacter::GrabLadder(bool b)
 							Info
 						);
 					}
-					//this->SetActorRotation(FQuat(OwnLadder->GetActorRotation().Quaternion()));
 				}
 			}
-
-			////test
-			//if (ALadder* AML = Cast<ALadder>(OwnLadder))
-			//{
-			//	FVector Vec = AML->GetActorLocation();
-
-
-			//	if (GEngine)
-			//	{
-			//		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, FString::Printf(TEXT("%f, %f, %f ,,, %f"), Vec.X, Vec.Y, Vec.Z, AML->GetCrossbarHeight(6)));
-			//	}
-
-			//	//AML->SetLHandStep(6);	//hard coding
-			//	//AML->SetRHandStep(5);	//hard coding
-			//	AML->SetLHandStep(3);	//hard coding
-			//	AML->SetRHandStep(4);	//hard coding
-			//	//ToggleLHandIK(true, FVector(Vec.X, Vec.Y - /*hard coding*/10.0f, Vec.Z + AML->GetCrossbarHeight(6)));
-			//	ToggleLHandIK(true, FVector(0, 0, 0));
-			//	ToggleRHandIK(true, FVector(0, 0, 0));
-			//}
 
 		}
 		else if (!b && bIsOnLadder)
@@ -2584,12 +2504,6 @@ void AMainCharacter::GrabLadder(bool b)
 			this->GetCapsuleComponent()->SetCapsuleRadius(30.0f);	// hard coding warning! restoration from radius for ladder
 
 			CharacterMovementComponent->SetMovementMode(MOVE_Walking);
-
-
-
-			//test
-			//ToggleLHandIK(false, FVector(0.0f, 0.0f, 0.0f));
-			//ToggleRHandIK(false, FVector(0.0f, 0.0f, 0.0f));
 		}
 	}
 }
@@ -2601,19 +2515,16 @@ bool AMainCharacter::GetIsOnLadder()
 
 bool AMainCharacter::GetIsClimbing()
 {
-	//return AxisClimbing != 0 ? true : false;
 	return bIsLadderClimbing;
 }
 
 bool AMainCharacter::GetIsSideClimbing()
 {
-	//return AxisClimbing != 0 ? true : false;
 	return bIsLadderSideClimbing;
 }
 
 float AMainCharacter::GetAxisClimbing()
 {
-	//return AxisClimbing * LadderSpeed;
 	return AxisClimbingDir * LadderSpeed;
 }
 
@@ -2643,13 +2554,8 @@ void AMainCharacter::ClimbLadder(float DeltaTime)
 				bIsLadderClimbing = false;
 				AxisClimbingDir = 0;
 				DeltaLadderClimbing = 0;
-				//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Cyan, FString::Printf(TEXT("End Climbing!!")));
 			}
 		}
-
-
-		//this->SetActorLocation(this->GetActorLocation() + FVector(0, 0, Gap / /*hard coding*/ 1.0f * AxisClimbing * LadderSpeed * DeltaTime));
-		//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Cyan, FString::Printf(TEXT("Going on!! %f"), AxisClimbing));
 	}
 }
 
@@ -2736,15 +2642,8 @@ void AMainCharacter::ClimbLadderSide(float DeltaTime)
 			FVector VL = LLoc - LRVec * (LScale.Y * 50 - 20 /* half of character width */) - (CLoc + LFwVec * 15.f);
 			FVector VR = LLoc + LRVec * (LScale.Y * 50 - 20 /* half of character width */) - (CLoc + LFwVec * 15.f);
 
-			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, FString::Printf(TEXT("LLoc (%.2f, %.2f, %.2f)"), LLoc.X, LLoc.Y, LLoc.Z));
-			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("CLoc + Offset (%.2f, %.2f, %.2f)"), (CLoc + LFwVec * 15.f).X, (CLoc + LFwVec * 15.f).Y, (CLoc + LFwVec * 15.f).Z));
-
-
 			float DistRemL = sqrt(VL.X * VL.X + VL.Y * VL.Y);
 			float DistRemR = sqrt(VR.X * VR.X + VR.Y * VR.Y);
-
-			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, FString::Printf(TEXT("Dist::%f %f"), DistRem, LadderSideSpeed * 1.166667));
-			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, FString::Printf(TEXT("Comp::%f + %f - %f"), LLoc.Y, (LRVec * (LScale.Y * 50 - 25)).Y, (CLoc + LFwVec * 15.f).Y));
 
 			float MoveDistanceUnit = LadderSideSpeed * 1.166667; // move distance per 1cycle
 			if (AxisSideClimbing < 0 && DistRemL > MoveDistanceUnit || AxisSideClimbing > 0 && DistRemR > MoveDistanceUnit) {
@@ -2774,9 +2673,6 @@ void AMainCharacter::ClimbLadderSide(float DeltaTime)
 			}
 		}
 
-
-		//this->SetActorLocation(this->GetActorLocation() + FVector(0, 0, Gap / /*hard coding*/ 1.0f * AxisClimbing * LadderSpeed * DeltaTime));
-		//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Cyan, FString::Printf(TEXT("SIDE::%f"), AxisSideClimbing));
 	}
 }
 
@@ -2787,170 +2683,6 @@ void AMainCharacter::CountTimeToEnableGrabLadder(float DeltaTime)
 	else if (TimeToEnableGrabLadder < 0.0f)
 		TimeToEnableGrabLadder = 0.0f;
 }
-
-//void AMainCharacter::ClimbLadder(float AxisValue)
-//{
-//	if (bIsControllable && Controller && bIsOnLadder)
-//	{
-//		AxisInputF = AxisValue;
-//
-//		if (AxisInputF > 0.0f)
-//			AxisClimbing = 1;
-//		else if (AxisInputF < 0.0f)
-//			AxisClimbing = -1;
-//
-//		ClimbLadderOneCycle();
-//	}
-//}
-//
-//void AMainCharacter::ClimbLadderOneCycle()
-//{
-//
-//	if (bIsOnLadder)
-//	{
-//		if (AxisClimbing == 0.0f)
-//		{
-//			CharacterMovementComponent->Velocity = FVector(0.0f);
-//		}
-//		else
-//		{
-//			//CharacterMovementComponent->MaxFlySpeed = 70.0f;
-//			CharacterMovementComponent->MaxFlySpeed = 10.0f;
-//			//AddMovementInput(FVector(0.0f, 0.0f, 700000.0f), AxisClimbing);
-//		}
-//	}
-//}
-//
-//void AMainCharacter::ClimbByStep(float DeltaTime)
-//{
-//	if (AxisClimbing != 0 && bIsOnLadder) {
-//		float Gap = Cast<ALadder>(OwnLadder)->GetCrossbarGap();
-//
-//		this->SetActorLocation(this->GetActorLocation() + FVector(0, 0, 2 * Gap / /*hard coding*/ 1.0f * AxisClimbing * DeltaTime));
-//		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Cyan, FString::Printf(TEXT("Going on!! %f"), AxisClimbing));
-//	}
-//}
-//
-//
-//void AMainCharacter::StopClimbing()
-//{
-//
-//	if (AxisInputF == 0.0f) {
-//
-//		AxisClimbing = 0.0f;
-//		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Stop!!"));
-//	}
-//}
-//
-//
-//void AMainCharacter::ToggleLHandIK(bool b, FVector v /*useless*/)
-//{
-//	if (ALadder* AML = Cast<ALadder>(OwnLadder))
-//	{
-//		if (b)
-//		{
-//			LHandIKAlpha = 1.0f;
-//
-//			FVector Vec = AML->GetActorLocation();
-//			LHandIKEffector = FVector(Vec.X, Vec.Y, Vec.Z + AML->GetCrossbarHeight(AML->GetLHandStep())) + FVector(-5.0f, -20.0f, -5.0f);
-//		}
-//		else
-//		{
-//			LHandIKAlpha = 0.0f;
-//
-//			if (AxisClimbing > 0)
-//				AML->SetLHandStep(AML->GetLHandStep() + 2);	//��ٸ� �ö󰥶�
-//			else if (AxisClimbing < 0)
-//				AML->SetLHandStep(AML->GetLHandStep() - 2);	//��ٸ� ��������
-//		}
-//	}
-//}
-//
-//void AMainCharacter::ToggleRHandIK(bool b, FVector v)
-//{
-//	if (ALadder* AML = Cast<ALadder>(OwnLadder))
-//	{
-//		if (b)
-//		{
-//			RHandIKAlpha = 1.0f;
-//
-//			FVector Vec = AML->GetActorLocation();
-//			RHandIKEffector = FVector(Vec.X, Vec.Y, Vec.Z + AML->GetCrossbarHeight(AML->GetRHandStep())) + FVector(-15.0f, 20.0f, 5.0f);
-//		}
-//		else
-//		{
-//			RHandIKAlpha = 0.0f;
-//
-//			if (AxisClimbing > 0)
-//				AML->SetRHandStep(AML->GetRHandStep() + 2);	//��ٸ� �ö󰥶�
-//			else if (AxisClimbing < 0)
-//				AML->SetRHandStep(AML->GetRHandStep() - 2);	//��ٸ� ��������
-//		}
-//	}
-//}
-//
-//float AMainCharacter::GetLHandIKAlpha()
-//{
-//	return LHandIKAlpha;
-//}
-//
-//float AMainCharacter::GetRHandIKAlpha()
-//{
-//	return RHandIKAlpha;
-//}
-//
-//FVector AMainCharacter::GetLHandIKEffector()
-//{
-//	return LHandIKEffector;
-//}
-//
-//FVector AMainCharacter::GetRHandIKEffector()
-//{
-//	return RHandIKEffector;
-//}
-//
-//void AMainCharacter::SetMAxisLadder(int a)
-//{
-//	MAxisLadder = a;
-//}
-//
-//void AMainCharacter::CheckLadderTop()
-//{
-//	if (ALadder* AML = Cast<ALadder>(OwnLadder))
-//	{
-//		if (!bIsOnLadderTop && (AML->GetTopVector() - this->GetActorLocation()).Z < 80.0f) {
-//			bIsOnLadderTop = true;
-//
-//			AxisClimbing = 0.0f;
-//			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Stop!!!!!!!"));
-//			bIsOnLadder = false;
-//
-//			// off IKs
-//			ToggleLHandIK(false, FVector(0, 0, 0));
-//			ToggleRHandIK(false, FVector(0, 0, 0));
-//		}
-//
-//	}
-//}
-//
-//void AMainCharacter::EndClimbingLadder()
-//{
-//	bIsOnLadderTop = false;
-//
-//	CharacterMovementComponent->SetMovementMode(MOVE_Walking);
-//
-//}
-//
-//bool AMainCharacter::GetIsOnLadderTop()
-//{
-//	return bIsOnLadderTop;
-//}
-//
-//void AMainCharacter::SetIsOnLadderTop(bool B)
-//{
-//	bIsOnLadderTop = B;
-//}
-
 
 // mj - Pulley
 void AMainCharacter::SetPulley(AActor* A, bool b)
@@ -2982,8 +2714,7 @@ void AMainCharacter::GrabPulley(bool b)
 		{
 
 			if (bIsFP)
-			{
-				//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6, FColor::Cyan, FString::Printf(TEXT("switch cam to tp:%d"), bCantSwitchCam ? 0 : 1));
+			{		
 				SwitchCamera();
 			}
 			TurnOffFlashLight();
@@ -2996,8 +2727,6 @@ void AMainCharacter::GrabPulley(bool b)
 			CharacterMovementComponent->StopMovementImmediately();
 
 			Cast<APulley>(MyPulley)->BeginPull();
-			// animation
-			// ik?
 		}
 	}
 	else
@@ -3007,7 +2736,6 @@ void AMainCharacter::GrabPulley(bool b)
 
 		if (bIsGrabbingPulley)
 		{
-			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6, FColor::Cyan, TEXT("disable grab pulley "));
 			bIsGrabbingPulley = false;
 			bIsPullingPulley = false;
 
@@ -3017,7 +2745,6 @@ void AMainCharacter::GrabPulley(bool b)
 
 
 			Cast<APulley>(MyPulley)->BeginRelease();
-			// disable ik?
 		}
 	}
 }
@@ -3026,8 +2753,6 @@ void AMainCharacter::KeepGrabbingPulley()
 {
 	if (bIsGrabbingPulley)
 	{
-		// SetActorLocation(Cast<APulley>(MyPulley)->GetHandleLocation());
-
 		FLatentActionInfo Info;
 		Info.CallbackTarget = this;
 		UKismetSystemLibrary::MoveComponentTo

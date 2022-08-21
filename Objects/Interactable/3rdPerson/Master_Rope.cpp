@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "Master_Rope.h"
 #include "HighlightableComponent.h"
@@ -32,13 +30,6 @@ AMaster_Rope::AMaster_Rope()
 
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AMaster_Rope::OnCapsuleComponentOverlapBegin);
 	CapsuleComponent->OnComponentEndOverlap.AddDynamic(this, &AMaster_Rope::OnCapsuleComponentOverlapEnd);
-
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereAsset(TEXT
-	("StaticMesh'/Game/StaticMesh/Mesh/Shape_Sphere.Shape_Sphere'"));
-	if (SphereAsset.Succeeded())
-	{
-		CableEnd->SetStaticMesh(SphereAsset.Object);
-	}*/
 	
 }
 

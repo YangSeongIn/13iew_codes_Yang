@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "LaserEmitter.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -11,10 +9,8 @@
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 #include <LevelSequence/Public/LevelSequenceActor.h>
 
-// Sets default values
 ALaserEmitter::ALaserEmitter()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Glass"));
 	RootComponent = StaticMesh;
@@ -32,7 +28,6 @@ ALaserEmitter::ALaserEmitter()
 	SetActorTickInterval(0.1f);
 }
 
-// Called when the game starts or when spawned
 void ALaserEmitter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -40,7 +35,6 @@ void ALaserEmitter::BeginPlay()
 
 }
 
-// Called every frame
 void ALaserEmitter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -62,7 +56,6 @@ void ALaserEmitter::CastLight(FVector CastOrigin, FVector CastDirection)
 		bool bIsOutHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), _CastOrigin, _CastOrigin + _CastDirection * 3000.0f, ETraceTypeQuery::TraceTypeQuery4, false,
 			ToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 0.1f);
 
-		// Laser Emitter
 		if (bIsOutHit)
 		{
 			if (LaserEmitter)
@@ -87,7 +80,6 @@ void ALaserEmitter::CastLight(FVector CastOrigin, FVector CastDirection)
 					if (SequenceAsset)
 					{
 						SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), SequenceAsset, PlaybackSettings, LS_Actor);
-						//Sequence Play
 						if (!SequencePlayer->IsPlaying())
 						{
 							SequencePlayer->Play();

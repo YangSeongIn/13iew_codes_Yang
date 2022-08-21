@@ -17,9 +17,6 @@ class CAP2_API ABalance : public AActor
 public:	
 	ABalance();
 
-	//bool bIsMainCharacterOnPlate1;
-	//bool bIsMainCharacterOnPlate2;
-
 	UPROPERTY(BlueprintReadWrite)
 		float Plate1Mass;
 	UPROPERTY(BlueprintReadWrite)

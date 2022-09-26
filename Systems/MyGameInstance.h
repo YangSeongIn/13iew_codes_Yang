@@ -22,7 +22,7 @@ UCLASS()
 class CAP2_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 	// For Saving Total Play Time
 	float EndTime;
@@ -45,6 +45,8 @@ public:
 		void LoadData();
 	UFUNCTION()
 		void DeleteData();
+	UFUNCTION()
+		void SaveTotalTime();
 
 	FOnReset OnReset;
 	FOnSave OnSave;
@@ -54,6 +56,7 @@ public:
 	TArray<FString> LevelArray =
 	{
 		"Level1",
-		"Level2_SaveTest",
+		//"Level2_SaveTest",
+		"Level2"
 	};
 };

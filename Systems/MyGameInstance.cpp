@@ -1,3 +1,6 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
 #include "MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -28,8 +31,7 @@ void UMyGameInstance::SaveData(FVector LocToSave)
 		{
 			OnSave.Broadcast();
 
-			EndTime = UGameplayStatics::GetTimeSeconds(GetWorld());
-			SaveGameData->TotalPlayTime += EndTime;
+			SaveTotalTime();
 			SaveLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 			SaveGameData->SaveLevelName = SaveLevelName;
 			SaveGameData->SavePointType = CheckPointRespawnType;
@@ -41,7 +43,7 @@ void UMyGameInstance::SaveData(FVector LocToSave)
 			else if (UGameplayStatics::GetCurrentLevelName(GetWorld()) == LevelArray[1])
 			{
 				SaveGameData->Level2SaveDataStruct.MainCharacterLocation = LocToSave;
-			
+
 			}
 
 			UGameplayStatics::SaveGameToSlot(SaveGameData, SaveSlotName, 0);
@@ -66,12 +68,10 @@ void UMyGameInstance::LoadData()
 				if (UGameplayStatics::GetCurrentLevelName(GetWorld()) == LevelArray[0])
 				{
 					MainCharacter->SetActorLocation(SaveGameData->Level1SaveDataStruct.MainCharacterLocation);
-				
 				}
 				else if (UGameplayStatics::GetCurrentLevelName(GetWorld()) == LevelArray[1])
 				{
 					MainCharacter->SetActorLocation(SaveGameData->Level2SaveDataStruct.MainCharacterLocation);
-				
 				}
 			}
 		}
@@ -81,4 +81,10 @@ void UMyGameInstance::LoadData()
 void UMyGameInstance::DeleteData()
 {
 	UGameplayStatics::DeleteGameInSlot(SaveSlotName, 0);
+}
+
+void UMyGameInstance::SaveTotalTime()
+{
+	EndTime = UGameplayStatics::GetTimeSeconds(GetWorld());
+	SaveGameData->TotalPlayTime += EndTime;
 }

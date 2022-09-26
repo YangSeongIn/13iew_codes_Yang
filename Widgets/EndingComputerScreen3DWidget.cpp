@@ -9,6 +9,18 @@
 void UEndingComputerScreen3DWidget::NativeConstruct()
 {
 	GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	if (GameInstance)
+	{
+		FString s11 = SetTimeToString(GameInstance->SaveGameData->TotalPlayTime);
+		Time_11th->SetText(FText::FromString(s11));
+
+		FString s12 = SetTimeToString(GameInstance->SaveGameData->TotalPlayTime + 64);
+		Time_12th->SetText(FText::FromString(s12));
+
+		FString s13 = SetTimeToString(GameInstance->SaveGameData->TotalPlayTime + 124);
+		Time_13th->SetText(FText::FromString(s13));
+	}
 }
 
 void UEndingComputerScreen3DWidget::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
@@ -18,9 +30,9 @@ void UEndingComputerScreen3DWidget::NativeTick(const FGeometry& MyGeometry, floa
 
 FString UEndingComputerScreen3DWidget::SetTimeToString(float Time)
 {
-	float h = Time / 3600.0f;
-	float m = fmod(Time, 3600.0f) / 60.0f;
-	float s = fmod(Time, 60.0f);
-	FString TimeFormat = FString::Printf(TEXT("%02f:%02f:%02f"), h, m, s);
+	int h = (int)(Time / 3600.0f);
+	int m = (int)(fmod(Time, 3600.0f) / 60.0f);
+	int s = (int)(fmod(Time, 60.0f));
+	FString TimeFormat = FString::Printf(TEXT("%02d:%02d:%02d"), h, m, s);
 	return TimeFormat;
 }

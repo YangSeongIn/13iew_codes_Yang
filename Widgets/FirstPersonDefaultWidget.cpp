@@ -41,11 +41,7 @@ void UFirstPersonDefaultWidget::FadeOutAnimationEnded()
 	if (bIsToNextLevel)
 	{
 		bIsToNextLevel = false;
-		uint8 Level = MainCharacter->GameInstance->LevelArray.Find(MainCharacter->GameInstance->SaveGameData->SaveLevelName);
-		if (MainCharacter->GameInstance->LevelArray.Num() >= Level + 1)
-		{
-			UGameplayStatics::OpenLevel(GetWorld(), FName(MainCharacter->GameInstance->LevelArray[Level + 1]));
-		}
+		UGameplayStatics::OpenLevel(GetWorld(), FName(NextLevelName));
 	}
 }
 
@@ -65,11 +61,7 @@ void UFirstPersonDefaultWidget::FadeOut_DoctorAnimationEnded()
 	if (bIsToNextLevel)
 	{
 		bIsToNextLevel = false;
-		uint8 Level = MainCharacter->GameInstance->LevelArray.Find(MainCharacter->GameInstance->SaveGameData->SaveLevelName);
-		if (MainCharacter->GameInstance->LevelArray.Num() >= Level + 1)
-		{
-			UGameplayStatics::OpenLevel(GetWorld(), FName(MainCharacter->GameInstance->LevelArray[Level + 1]));
-		}
+		UGameplayStatics::OpenLevel(GetWorld(), FName(NextLevelName));
 	}
 }
 
@@ -89,8 +81,9 @@ void UFirstPersonDefaultWidget::ControllableAnimationFinished()
 	MainCharacter->SetIsControllable(true);
 }
 
-void UFirstPersonDefaultWidget::PlayWidgetAnimation(UWidgetAnimation* Animation, bool b)
+void UFirstPersonDefaultWidget::PlayWidgetAnimation(UWidgetAnimation* Animation, bool b, FString LevelName)
 {
 	PlayAnimation(Animation);
 	bIsToNextLevel = b;
+	NextLevelName = LevelName;
 }

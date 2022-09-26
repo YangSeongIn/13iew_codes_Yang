@@ -7,10 +7,8 @@
 #include "SaveGameObject.h"
 #include "FirstPersonDefaultWidget.h"
 
-// Sets default values
 ACheckPoint::ACheckPoint()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
@@ -66,23 +64,20 @@ void ACheckPoint::NormalCheckPoint()
 
 void ACheckPoint::ToNextLevel()
 {
-	if (UGameplayStatics::GetCurrentLevelName(GetWorld()) == GameInstance->LevelArray[0])
-	{
-		MainCharacter->bIsStartingPoint = false;
-		MainCharacter->DefaultWidget->PlayWidgetAnimation(MainCharacter->DefaultWidget->FadeOut, true);
+	MainCharacter->bIsStartingPoint = false;
+	MainCharacter->DefaultWidget->PlayWidgetAnimation(MainCharacter->DefaultWidget->FadeOut, true);
 
-		GameInstance->SaveGameData->Level1SaveDataStruct.CheckPointData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.MovableData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.DoorData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.LeverData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.SlicableData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.ConveyorBeltData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.CorpseGeneratorData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.ObjectToBeSavedData_Transform.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.ObjectToBeSavedData_Visibility.Empty();
-		//GameInstance->SaveGameData->Level1SaveDataStruct.DrawerData.Empty();
-		GameInstance->SaveGameData->Level1SaveDataStruct.ThrowableData.Empty();
-	}
+	GameInstance->SaveGameData->Level1SaveDataStruct.CheckPointData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.MovableData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.DoorData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.LeverData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.SlicableData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.ConveyorBeltData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.CorpseGeneratorData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.ObjectToBeSavedData_Transform.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.ObjectToBeSavedData_Visibility.Empty();
+	//GameInstance->SaveGameData->Level1SaveDataStruct.DrawerData.Empty();
+	GameInstance->SaveGameData->Level1SaveDataStruct.ThrowableData.Empty();
 }
 
 void ACheckPoint::SaveGameToSlot()

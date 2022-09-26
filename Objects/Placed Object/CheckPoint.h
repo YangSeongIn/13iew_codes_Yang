@@ -21,25 +21,32 @@ UCLASS()
 class CAP2_API ACheckPoint : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ACheckPoint();
+
 	// box to next level or save game
 	UPROPERTY(EditAnywhere)
-		bool bIsNextLevel = false;
+		TEnumAsByte <ECheckPointType> CheckPointType = ECheckPointType::CheckPoint;
+	// indicates the name of the saved point in the main menu
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "CheckPointType == ECheckPointType::CheckPoint"))
+		FString SavePointName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (EditCondition = "CheckPointType == ECheckPointType::CheckPoint"))
+		TEnumAsByte<ECheckPointRespawnType> CheckPointRespawnType = ECheckPointRespawnType::Getup;
+	// name of next level
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "CheckPointType == ECheckPointType::ToNextLevel"))
+		FString NextLevelName;
+
 	// boolean to save the use of this object
 	UPROPERTY()
 		bool bIsDestroyed = false;
-	// Indicates the name of the saved point in the main menu
-	UPROPERTY(EditAnywhere)
-		FString SavePointName;
 
 	// components
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Component")
 		USceneComponent* RespawnLocation;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Component")
 		UBoxComponent* Box;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Component")
 		UArrowComponent* Arrow;
 
 	UPROPERTY()
@@ -47,8 +54,7 @@ public:
 	UPROPERTY()
 		class UMyGameInstance* GameInstance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Status)
-		TEnumAsByte<ECheckPointRespawnType> CheckPointRespawnType;
+
 
 	UFUNCTION()
 		void Reset();
@@ -64,7 +70,7 @@ public:
 		void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-// About Enum
+	// About Enum
 public:
 	// Make enum to string. (for getting name of level)
 	template <typename Enumeration>

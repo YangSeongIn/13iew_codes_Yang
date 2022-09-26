@@ -11,20 +11,22 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
-
 #include "FirstPersonDefaultWidget.generated.h"
 
 UCLASS()
 class CAP2_API UFirstPersonDefaultWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+private:
+
+
 public:
 	class AMainCharacter* MainCharacter;
-
+	FString NextLevelName = "";
 	bool bIsToNextLevel;
 
-	void PlayWidgetAnimation(UWidgetAnimation* Animation, bool b);
+	void PlayWidgetAnimation(UWidgetAnimation* Animation, bool b, FString LevelName);
 
 	UPROPERTY(meta = (BindWidget))
 		class UImage* Image_CanSwitchView;

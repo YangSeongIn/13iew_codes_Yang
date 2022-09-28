@@ -29,9 +29,10 @@ public:
 
 	UFUNCTION()
 		void TurnOnHighlight();
-	
-	FLatentActionInfo LAI;
-
+	//
+	// A function connected a LatentActionInfo Structure for repeating the operation of highlighting 
+	// when focusing and erasing the highlighting after a certain period of time.
+	//
 	UFUNCTION()
 		void DelayFunc();
 

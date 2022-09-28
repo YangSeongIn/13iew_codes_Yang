@@ -115,14 +115,15 @@ AMainCharacter::AMainCharacter()
 	SmoothCrouchCurveTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("SmoothCrouchTimeline"));
 	SmoothCrouchInterpFunction.BindUFunction(this, FName("SmoothCrouchInterpReturn"));
 
+	// Camera post process effect when in water.
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> M_FPCameraWaterEffect(TEXT("MaterialInstanceConstant'/Game/UsableObjects/Water/Mat_WaterPostProcess_Inst.Mat_WaterPostProcess_Inst'"));
 	if (M_FPCameraWaterEffect.Succeeded())
 	{
 		FPCameraWaterEffect = M_FPCameraWaterEffect.Object;
 	}
 
+	// AI
 	SetupStimulus();
-
 }
 
 void AMainCharacter::BeginPlay()
@@ -140,7 +141,6 @@ void AMainCharacter::BeginPlay()
 
 	FlashLight_SV->AttachToComponent(SkeletalMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FlashLightSocket"));
 	DefaultWidget->PlayAnimation(DefaultWidget->FadeIn);
-
 }
 
 void AMainCharacter::InitialSetting()
@@ -148,6 +148,7 @@ void AMainCharacter::InitialSetting()
 	GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	PlayerController = GetWorld()->GetFirstPlayerController();
 
+	// add default widget to viewport. Most of the widget-related operations are done on this widget.
 	if (_DefaultWidget)
 	{
 		DefaultWidget = Cast<UFirstPersonDefaultWidget>(CreateWidget(GetWorld(), _DefaultWidget));
@@ -220,10 +221,9 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	// Yang
-
+	// LSM Later
 	bIsDefaultState = bIsControllable && !bIsGrabbingThrowable && !bIsOnPole && !bIsAttachedAtMovable && !bIsSliding && !bIsHangingRope && !bIsOnLedge && !bIsCrouching && !bIsOnLadder && !bIsOnPulley;
 	bIsDefaultStateNotIncludingCrouching = bIsControllable && !bIsGrabbingThrowable && !bIsOnPole && !bIsAttachedAtMovable && !bIsSliding && !bIsHangingRope && !bIsOnLedge && !bIsOnLadder && !bIsGrabbingPulley;
-
 	CharacterMaxWalkSpeedManager();
 	FallingManager();
 	CrouchManager();
@@ -233,9 +233,6 @@ void AMainCharacter::Tick(float DeltaTime)
 	DefaultWidgetManager();
 	MoveLedgeManager();
 	SwimmingManager();
-
-	// Kang
-	// Ledge
 	LedgeManager();
 
 	// mj
@@ -249,7 +246,7 @@ void AMainCharacter::Tick(float DeltaTime)
 	GrabPulley(bIsPressLMB);
 	RollLockWheel(DeltaTime);
 
-	// Park
+	// Park & Yang
 	PullBoardManager();
 }
 
@@ -1888,8 +1885,10 @@ void AMainCharacter::SwimmingManager()
 	{
 		if (!bIsFP)
 		{
+			// '부력'
 			CharacterMovementComponent->Buoyancy = 1.3f;
 
+			// Line trace to switch to swimming mode at desired depth
 			FVector StartLoc = TriggerCapsuleComponent->GetComponentLocation();
 			FVector EndLoc = StartLoc - TriggerCapsuleComponent->GetUpVector() * 100.0f;
 			TArray<AActor*> ToIgnore;
@@ -2051,6 +2050,7 @@ void AMainCharacter::TurnOffFlashLight()
 	bIsFlashMode = false;
 }
 
+// Hiding the wall on the side view camera side when in 3rd person mode
 void AMainCharacter::SetVisibilityHidedActors(bool b, TArray<AActor*> Actors)
 {
 	for (AActor* i : Actors)
@@ -2059,6 +2059,7 @@ void AMainCharacter::SetVisibilityHidedActors(bool b, TArray<AActor*> Actors)
 	}
 }
 
+// Check Point delegate. Saving flash light and location.
 void AMainCharacter::Save()
 {
 	GameInstance->SaveGameData->MainCharacterStruct.bIsStartingPoint = false;
@@ -2066,6 +2067,7 @@ void AMainCharacter::Save()
 	DefaultWidget->PlayAnimation(DefaultWidget->Save);
 }
 
+// Load data when character Respawn or user resume game.
 void AMainCharacter::Reset()
 {
 	if (bIsTestingMode)

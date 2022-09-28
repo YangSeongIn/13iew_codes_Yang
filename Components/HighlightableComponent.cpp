@@ -8,7 +8,8 @@ void UHighlightableComponent::BeginPlay()
 	Super::BeginPlay();
 
 	MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (Cast<UStaticMeshComponent>(GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass())))
+	bool bCastStaticMesh = Cast<UStaticMeshComponent>(GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+	if (bCastStaticMesh)
 	{
 		StaticMesh = Cast<UStaticMeshComponent>(GetOwner()->GetDefaultSubobjectByName(FName(TEXT("StaticMesh"))));
 	}
@@ -16,10 +17,14 @@ void UHighlightableComponent::BeginPlay()
 
 void UHighlightableComponent::TurnOnHighlight()
 {
+	// RetriggerableDelay LatentActionInfo Struct for highlighting for a  certain period of time
+	FLatentActionInfo LAI;
 	LAI.CallbackTarget = this;
 	LAI.ExecutionFunction = "DelayFunc";
 	LAI.Linkage = 0;
-	UKismetSystemLibrary::RetriggerableDelay(GetWorld(), 0.1f, LAI);
+
+	float DeleteHighlightingTime = 0.1f;
+	UKismetSystemLibrary::RetriggerableDelay(GetWorld(), DeleteHighlightingTime, LAI);
 	while (DoN < 1)
 	{
 		DoN++;

@@ -19,8 +19,8 @@ class CAP2_API AInteractableItem_Key : public AMaster_InteractableItem
 
 public:
 	AInteractableItem_Key();
-	
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> KeyInventoryWidgetClass;

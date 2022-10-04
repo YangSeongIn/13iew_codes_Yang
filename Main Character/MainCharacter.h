@@ -10,7 +10,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
+// by Yang
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
@@ -24,7 +24,7 @@
 #include "Interface_InteractWithWidget.h"
 #include "Components/SpotLightComponent.h"
 
-// mj
+// by mj
 #include "Ladder.h"
 
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
@@ -44,10 +44,18 @@ class CAP2_API AMainCharacter : public ACharacter, public IInterface_MainCharact
 {
 	GENERATED_BODY()
 
+public:
+	AMainCharacter();
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 private:
-	// Basic
-	bool bIsDefaultState;
-	bool bIsDefaultStateNotIncludingCrouching;
+	// Basic by Yang
+	bool bIsDefaultState = false;
+	bool bIsDefaultStateNotIncludingCrouching = false;
 	bool bIsControllable = true;
 	bool bIsSprinting = false;
 	bool bIsFalling = false;
@@ -62,17 +70,26 @@ private:
 	bool bIsOnPole = false;
 	bool bIsPressingSprintKey;
 	bool bIsWithDoctorWhenDie = true;
-	bool bIsRunningJumping;
-	bool bPressJumpKey;
-	bool bIsFlashMode;
-	bool bCanStand;
-	bool bIsDead;
+	bool bIsRunningJumping = false;
+	bool bPressJumpKey = false;
+	bool bIsFlashMode = false;
+	bool bCanStand = false;
+	bool bIsDead = false;
+	bool bIsStartingPoint = true;
+	bool bCantSwitchView = true;
+	bool bHaveFlashLight = false;
+	bool bIsWalkingOnSwimming = false;
+	bool bIsOverlapWithBoard = false;
+	bool bIsFallingDownPullBoard = false;
+	bool bIsHoldingThrowable = false;
+	bool bIsOnFocusHighlightable = false;
+	bool bIsActivatingValve = false;
 
 	const float CrouchHeight = 50.0f;
 	const float CapsuleDefaultHeight = 62.0f;
 	const float CapsuleDefaultRadius = 30.0f;
-	float TurnRate;
-	float LookUpRate;
+	float TurnRate = 0.0f;
+	float LookUpRate = 0.0f;
 	float TargetFocusDistance = 0.0f;
 	float XAxisValue = 0.0f;
 	float YAxisValue = 0.0f;
@@ -80,30 +97,30 @@ private:
 	float MouseSensitivityValue = 1.0f;
 	float MouseSensitivityWeight = 0.5f;
 
-	// Rope
-	bool bIsStaticRope;
+	// Rope by Yang
+	bool bIsStaticRope = false;
 
-	// Throw
-	bool bIsThrowKeyDown;
-	bool bReleasedLMB;
-	bool bCanThrow;
-	bool bIsPickingUp ;
-	bool bIsGrabbingThrowable ;
+	// Throw by Yang
+	bool bIsThrowKeyDown = false;
+	bool bReleasedLMB = false;
+	bool bCanThrow = false;
+	bool bIsPickingUp = false
+	bool bIsGrabbingThrowable = false;
 	float ThrowGauge = 0.0f;
 
-	// PushPull
-	bool bDoOncePushPull;
-	bool bIsAttachedAtMovable;
-	bool bIsLeftHandHitWall;
-	bool bIsRightHandHitWall;
+	// PushPull by Yang
+	bool bDoOncePushPull = false;
+	bool bIsAttachedAtMovable = false;
+	bool bIsLeftHandHitWall = false;
+	bool bIsRightHandHitWall = false;
 
-	// Ledge
-	bool bIsOnLedge;
-	bool bIsResisted;
+	// Ledge by Yang
+	bool bIsOnLedge = false;
+	bool bIsResisted = false;
 	bool bDoOnceLedge = true;
-	bool bCanLedgeRightHand;
-	bool bCanLedgeLeftHand;
-	float Range;
+	bool bCanLedgeRightHand = false;
+	bool bCanLedgeLeftHand = false;
+	float Range = 0.0f;
 	FVector HeightLoc;
 	FVector WallLoc;
 	FVector WallNorm;
@@ -112,53 +129,67 @@ private:
 	FRotator ClimbResistRotation;
 	FRotator CameraSwitchRot;
 
-	// LedgMove
-	bool bIsLedgeMoveRight;
-	bool bIsLedgeMoveLeft;
+	// LedgMove by Yang
+	bool bIsLedgeMoveRight = false;
+	bool bIsLedgeMoveLeft = false;
 	FVector GoalLocLeft;
 	FVector GoalLocRight;
 
-	// Movable
+	// Movable by Yang
 	FVector IKLeftHandLocation;
 	FVector IKRightHandLocation;
 
-	// AI
-	class UAIPerceptionStimuliSourceComponent* stimulus;
 	void SetupStimulus();
 
 public:
-	AMainCharacter();
+	// Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		UCapsuleComponent* TriggerCapsuleComponent;
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+		USpringArmComponent* SpringArmComponent;
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+		UCameraComponent* SideViewCameraComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		UCameraComponent* FirstPersonCameraComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCharacterMovementComponent* CharacterMovementComponent;
+	UPROPERTY(EditAnywhere, Category = Camera)
+		UPostProcessComponent* PostProcessComponent;
+	UPROPERTY(EditAnywhere, Category = FlashLight)
+		UStaticMeshComponent* FlashLight_SV;
+	UPROPERTY(EditAnywhere, Category = FlashLight)
+		UStaticMeshComponent* FlashLight_FP;
+	UPROPERTY(EditAnywhere, Category = FlashLight)
+		USpotLightComponent* SpotLight_SV;
+	UPROPERTY(EditAnywhere, Category = FlashLight)
+		USpotLightComponent* SpotLight_FP;
+	UPROPERTY(EditAnywhere, Category = FlashLight)
+		class AMaster_Slicable* SlicableMesh;
+	UPROPERTY(EditAnywhere, Category = FlashLight)
+		class UAIPerceptionStimuliSourceComponent* stimulus;
+	UPROPERTY()
+		USkeletalMeshComponent* SkeletalMesh;
+	UPROPERTY()
+		class AMaster_Rope* _Rope;
+	UPROPERTY()
+		class AMaster_Pole* _Pole;
 
+	// by Kang
 	bool bIsHiding = false;
-	UPROPERTY(BlueprintReadWrite)
-		bool bIsCrawlingAnim = false;
-	bool bCantSwitchView = true;
-	bool bHaveFlashLight;
-	bool bIsWalkingOnSwimming;
-	bool bIsOverlapWithBoard;
-	bool bIsFallingDownPullBoard;
-	bool bIsHoldingThrowable;
-	bool bIsOnFocusHighlightable = false;
-	bool bIsActivatingValve = false;
-	bool bIsChangingDirection;
-	bool bDoOnceChangingDirection = true;
 
-	//AI
-	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "GamePlay")
+	//AI by Kang
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GamePlay")
 		bool bIsPlayerExit_1stFloor = false;
-	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "GamePlay")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GamePlay")
 		bool bIsPlayerExit_2ndFloor = false;
 	bool CanStand();
-
-
-	//UPROPERTY(EditAnywhere, Category = "GamePlay")
-	bool bIsStartingPoint = true;
+	// by Yang
 	UPROPERTY(BlueprintReadWrite)
 		float CrawlingSpeed = 0.0f;
 	UPROPERTY(BlueprintReadWrite)
 		float FallingDownSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, Category = "GamePlay")
-		bool bIsTestingMode;
+		bool bIsTestingMode = false;
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float DefaultWalkSpeed = 200.0f;
 	UPROPERTY(EditAnywhere, Category = "Movement")
@@ -167,14 +198,12 @@ public:
 		float DefaultSprintSpeed = 400.0f;
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float DefaultJumpVelocity = 400.0f;
-
-	APlayerController* PlayerController;
+	UPROPERTY()
+		APlayerController* PlayerController;
 	UPROPERTY()
 		FVector MainCharacterLocation;
-	UPROPERTY()
-		USkeletalMeshComponent* SkeletalMesh;
 
-	// Input Function
+	// Input Function by Yang
 	void LookX(float AxisValue);
 	void LookY(float AxisValue);
 	void MoveForward(float AxisValue);
@@ -195,9 +224,10 @@ public:
 	void FlashLight();
 	void LedgeMove();
 	void OpenKeyExplanationWidget();
+	void CheckEdgeSlip();
 	void GetUpWhenRespawn();
 
-	// Normal Function
+	// Normal Function by Yang
 	void CharacterMaxWalkSpeedManager();
 	void CrouchManager();
 	void FallingManager();
@@ -210,7 +240,8 @@ public:
 	void TurnOffFlashLight();
 	void SwimmingManager();
 
-	class AMaster_InteractableObject* InteractableObject;
+	UPROPERTY()
+		class AMaster_InteractableObject* InteractableObject;
 
 	UPROPERTY(BlueprintReadWrite)
 		TArray<AActor*> HidedActors;
@@ -219,12 +250,50 @@ public:
 	UFUNCTION()
 		void ResetHidedActors();
 
-	// FirstPerson Camera - Focusing and Hud Image Constrol 
+	// AnimMontage
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_PullBoard;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_PullBoardFallDown;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_FallingDownToStand;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+		UAnimMontage* M_HardLanding;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+		UAnimMontage* M_CrashStop;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_ClimbLedge;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_ClimbResistLedge;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_LedgeMoveRight;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_LedgeMoveLeft;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_PickUp;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_ReadyToThrow;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_Throw;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_Slide;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_CrawlingCorpse;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_CrawlToStand;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_RespawnStand;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_FallFlat;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* M_FallFront;
+
+	// FirstPerson Camera - Focusing and Hud Image Constrol by Yang
 	void DOF();
 	void DOFSetting();
 	void LineTraceHud();
 
-	// Throw
+	// Throw by Yang
 	void ThrowManager();
 	void PressLMBForThrow();
 	void ReleaseLMBForThrow();
@@ -240,13 +309,13 @@ public:
 		void OnMontageBlendOut(UAnimMontage* AnimMontage, bool bInterrupted);
 	FScriptDelegate Delegate_OnMontageNotifyBegin;
 
-	// Save and Load
+	// Save and Load by Yang
 	UFUNCTION(BlueprintCallable)
 		void Die();
 	void SaveLoadSetting();
 	FOnDie OnDie;
 
-	// Push Pull
+	// Push Pull by Yang
 	TTuple<FVector, bool> PushPullHandIK(FName SocketName, float Distance);
 	bool CanPushOrPullDegree();
 	void MovableObjPushPull();
@@ -259,7 +328,7 @@ public:
 	UFUNCTION()
 		void MovableMoveComponentToFunc();
 
-	// Ledge
+	// Ledge by Yang & Kang
 	bool bReleasedHangingLedge;
 	void LedgeManager();
 	void ForwardTrace(FVector StartLocation);
@@ -269,16 +338,16 @@ public:
 	void ResetLedge();
 	void StopHang();
 
-	// Move On Ledge
+	// Move On Ledge by Yang
 	void CheckMoveLedge(FString Key);
 	bool MoveLedgeHeightTrace(float offset, FString Key);
 	bool MoveLedgeForwardTrace(FVector StartLocation, FString Key);
 	void MoveLedgeManager();
 
-	//Make Noise
+	//Make Noise by Kang
 	void MakeNoise(USoundCue* FootStep, FVector Location);
 
-	// Get or Set Private Variables
+	// Get or Set Private Variables by Yang
 	bool GetIsFalling() { return bIsFalling; };
 	bool GetIsCrouching() { return bIsCrouching; };
 	bool GetIsReadyToLand() { return bIsReadyToLand; };
@@ -305,29 +374,33 @@ public:
 	bool GetIsPressJumpKey() { return bPressJumpKey; };
 	bool HasFlashLight() { return bIsFlashMode; };
 	bool IsDead() { return bIsDead; };
+	void SetIsOverlapWithBoard(bool b) { bIsOverlapWithBoard = b; };
+	bool GetIsWalkingOnSwimming() { return bIsWalkingOnSwimming; };
+	void SetIsActivatingValve(bool b) { bIsActivatingValve = b; };
+	bool GetIsOnFocusHighlightable() { return bIsOnFocusHighlightable; };
+	void SetIsHoldingThrowable(bool b) { bIsHoldingThrowable = b; };
+	void SetHaveFlashLight(bool b) { bHaveFlashLight = b; };
+	void SetIsStartingPoint(bool b) { bIsStartingPoint = b; };
 	TTuple<FVector, bool> GetMovableLeftArmIKInfo() { return MakeTuple(IKLeftHandLocation, bIsLeftHandHitWall); };
 	TTuple<FVector, bool> GetMovableRightArmIKInfo() { return MakeTuple(IKRightHandLocation, bIsRightHandHitWall); };
 	TTuple<FVector, bool> GetPullBoardLeftArmIKInfo() { return MakeTuple(IKLeftHandLocation, bIsLeftHandPullBoard); };
 	TTuple<FVector, bool> GetPullBoardRightArmIKInfo() { return MakeTuple(IKRightHandLocation, bIsRightHandPullBoard); };
 
-	// Save and Load
-	class UMyGameInstance* GameInstance;
+	// Save and Load by Yang
+	UPROPERTY()
+		class UMyGameInstance* GameInstance;
 	UFUNCTION()
 		void Save();
 	UFUNCTION()
 		void Reset();
 
-	// Park
+	// Character Input Control by Park
+	void EnableInputCharacter();
+	void DisableInputCharacter();
 	void SetMouseSensitivity(float ChangedValue);
 
-	// Park, Pull Board
-	class AMaster_Slicable* SlicableMesh;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_PullBoard;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_PullBoardFallDown;
+	// Pull Board by Park & Yang
 	void ForwardHandIK();
-
 	void StartPullBoard();
 	void PullBoard();
 	void PullBoardChargingGauge(float ForwardVector, float AxisValue, float GaugeValue);
@@ -348,10 +421,8 @@ public:
 	float PullBoardGauge;
 	UPROPERTY(EditAnyWhere, Category = "PullBoard")
 		float PullBoardMaxGauge = 2.5f;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_FallingDownToStand;
 
-	// DOF
+	// DOF by Yang
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float FocusDistance = 0.0f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -359,40 +430,13 @@ public:
 	FTimerHandle DOFTimerHandle;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		FPostProcessSettings PPS;
-	class UMaterialInstanceConstant* FPCameraWaterEffect;
+	UPROPERTY()
+		class UMaterialInstanceConstant* FPCameraWaterEffect;
 
-	// Component
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		UCapsuleComponent* TriggerCapsuleComponent;
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		USpringArmComponent* SpringArmComponent;
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		UCameraComponent* SideViewCameraComponent;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		UCameraComponent* FirstPersonCameraComponent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UCharacterMovementComponent* CharacterMovementComponent;
-	UPROPERTY(EditAnywhere, Category = Camera)
-		UPostProcessComponent* PostProcessComponent;
-	UPROPERTY(EditAnywhere, Category = FlashLight)
-		UStaticMeshComponent* FlashLight_SV;
-	UPROPERTY(EditAnywhere, Category = FlashLight)
-		UStaticMeshComponent* FlashLight_FP;
-	UPROPERTY(EditAnywhere, Category = FlashLight)
-		USpotLightComponent* SpotLight_SV;
-	UPROPERTY(EditAnywhere, Category = FlashLight)
-		USpotLightComponent* SpotLight_FP;
-
-	UPROPERTY(EditAnywhere, Category = "Animation")
-		UAnimMontage* M_HardLanding;
-	UPROPERTY(EditAnywhere, Category = "Animation")
-		UAnimMontage* M_CrashStop;
-	UPROPERTY(EditAnywhere, Category = "Animation")
-		UAnimMontage* M_EdgeSlip;
 	UPROPERTY(EditAnywhere)
 		TArray<class AMaster_InteractableItem*> Inventory;
 
-	// Timeline
+	// Timeline by Yang
 	FOnTimelineFloat SmoothCrouchInterpFunction;
 	FOnTimelineEvent SmoothCrouchTimelineFinish;
 	UFUNCTION()
@@ -402,60 +446,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 		UCurveFloat* SmoothCrouchCurveFloat;
 
-	FOnTimelineFloat CrawlingInterpFunction;
-	FOnTimelineEvent CrawlingTimelineFinish;
-	UFUNCTION()
-		void CrawlingInterpReturn(float Value);
+	// Movable by Yang
 	UPROPERTY()
-		UTimelineComponent* CrawlingCurveTimeline;
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-		UCurveFloat* CrawlingCurveFloat;
+		class AMaster_Movable* MovableObj;
 
-	FOnTimelineFloat FallingDownInterpFunction;
-	UFUNCTION()
-		void FallingDownInterpReturn(float Value);
-	UPROPERTY()
-		UTimelineComponent* FallingDownCurveTimeline;
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-		UCurveFloat* FallingDownCurveFloat;
-
-	// Rope
-	class AMaster_Rope* _Rope;
-
-	// Pole
-	class AMaster_Pole* _Pole;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_JumpOnWall;
-
-	// Ledge
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_ClimbLedge;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_ClimbResistLedge;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_LedgeMoveRight;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_LedgeMoveLeft;
-
-	// Movable
-	class AMaster_Movable* MovableObj;
-
-	// Throw
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_PickUp;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_ReadyToThrow;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_Throw;
 	class AMaster_Throwable* ThrowableObject;
 
-	// CameraShake
+	// CameraShake by Yang
 	UPROPERTY(EditAnywhere, Category = "CameraShake")
 		TSubclassOf<UCameraShakeBase> CameraShake_Walk;
 	UPROPERTY(EditAnywhere, Category = "CameraShake")
 		TSubclassOf<UCameraShakeBase> CameraShake_Sprint;
 
-	// Widget
+	// Widget by Yang
 	IInterface_InteractWithWidget* InterfaceWithWidget;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> _DefaultWidget;
@@ -470,36 +473,14 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 		class UKeyExplanationWidget* KeyExplanationWidget;
 
-	// Sliding
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_Slide;
-
-	// CutScene
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_CrawlingCorpse;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_CrawlToStand;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_RespawnStand;
-
-	// Death
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_FallFlat;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* M_FallFront;
-
 	UPROPERTY(EditAnywhere)
 		class ASoundManager* SoundManager;
 
-	// Hide
-	class AInteractableObject_Hidable* HidableObject;
+	// Hide by Park
+	UPROPERTY()
+		class AInteractableObject_Hidable* HidableObject;
 	void EscapeFromHidableObject();
 	void SetHidableObject(class AInteractableObject_Hidable* Obj);
-	// protected
-protected:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Interface Method
 public:
@@ -530,7 +511,6 @@ private:
 	bool bIsLadderReady;
 	bool bIsOnLadder;
 	bool bIsOnLadderTop;
-
 	float AxisClimbing;
 	float AxisSideClimbing;
 	float AxisClimbingDir;
@@ -568,7 +548,8 @@ public:
 
 	// Pulley
 private:
-	AActor* MyPulley;
+	UPROPERTY()
+		AActor* MyPulley;
 	bool bIsOnPulley;
 	bool bIsGrabbingPulley;
 	bool bIsPullingPulley;
@@ -589,23 +570,27 @@ public:
 	// - Demo
 	void ForceToFPCam();
 
+	//-------------
+	// number lock
 private:
 	bool bIsInspectingLock = false;
 	bool bIsClickingWheel = false;
 	float TmpMousePositionY = 0;
 	int LockWheel = 0;
-
-	AActor* NumberLock;
+	UPROPERTY()
+		AActor* NumberLock;
 
 public:
 	void ToggleLockInspector(bool b);
 	void ClickLockWheel(bool b);
 	void RollLockWheel(float DeltaTime);
 
+	//----------------
+	// puzzle
 private:
 	bool bIsInspectingPuzzle = false;
-
-	AActor* MPuzzle;
+	UPROPERTY()
+		AActor* MPuzzle;
 
 public:
 	void TogglePuzzleInspector(bool b);

@@ -53,8 +53,8 @@ public:
 
 	UPROPERTY()
 		class UHighlightableComponent* HightlightableComponent;
-
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 	UFUNCTION()
 		void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,

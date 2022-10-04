@@ -36,8 +36,8 @@ public:
 		float ThrowableMass;
 	UPROPERTY(EditAnywhere)
 		float MassGap;
-
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 	UPROPERTY(EditAnywhere)
 		USceneComponent* DefaultSceneRoot;

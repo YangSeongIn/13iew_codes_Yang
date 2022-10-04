@@ -22,7 +22,8 @@ public:
 
 	bool bIsDestroyed = false;
 
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> _KeyGuideWidget;

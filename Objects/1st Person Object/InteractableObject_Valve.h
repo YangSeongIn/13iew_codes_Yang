@@ -42,7 +42,8 @@ private:
 public:
 	AInteractableObject_Valve();
 
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 	UPROPERTY(EditAnywhere)
 		AActor* LinkedActor;
@@ -61,8 +62,8 @@ public:
 		class UGaugeWidget* GaugeWidget;
 	UPROPERTY(EditAnywhere)
 		class ASoundManager* SoundManager;
-
-	class UAudioComponent* HorrorAudio;
+	UPROPERTY()
+		class UAudioComponent* HorrorAudio;
 
 protected:
 	virtual void Interact() override;

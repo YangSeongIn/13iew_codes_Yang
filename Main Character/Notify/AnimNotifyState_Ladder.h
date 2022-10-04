@@ -22,10 +22,10 @@ class CAP2_API UAnimNotifyState_Ladder : public UAnimNotifyState
 
 public:
 	UAnimNotifyState_Ladder();
-
-	class AMainCharacter* MainCharacter;
-
-	USoundCue* LadderSoundCue;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		USoundCue* LadderSoundCue;
 
 public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;

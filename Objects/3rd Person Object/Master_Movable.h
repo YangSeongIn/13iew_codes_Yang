@@ -23,7 +23,8 @@ class CAP2_API AMaster_Movable : public AActor
 public:	
 	AMaster_Movable();
 
-	class UMyGameInstance* GameInstance;
+	UPROPERTY()
+		class UMyGameInstance* GameInstance;
 
 	FVector DefaultBoxLocation;
 

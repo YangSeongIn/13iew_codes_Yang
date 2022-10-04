@@ -59,7 +59,8 @@ public:
 	void PickUp(FVector PickUpLocation, class AMainCharacter* MainCharacter);
 	void Throw(class AMainCharacter* MainCharacter, float ChargeRate);
 
-	AActor* HitActor;
+	UPROPERTY()
+		AActor* HitActor;
 
 	UFUNCTION(BlueprintCallable)
 		void HitSound(FVector Location);

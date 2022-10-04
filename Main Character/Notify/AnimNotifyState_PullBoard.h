@@ -19,8 +19,8 @@ class CAP2_API UAnimNotifyState_PullBoard : public UAnimNotifyState
 	GENERATED_BODY()
 public:
 	UAnimNotifyState_PullBoard();
-
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;

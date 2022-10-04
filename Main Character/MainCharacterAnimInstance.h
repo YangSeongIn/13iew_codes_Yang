@@ -24,17 +24,17 @@ UCLASS(transient, Blueprintable, hideCategories = AnimInstance, BlueprintType)
 class CAP2_API UMainCharacterAnimInstance : public UAnimInstance, public IInterface_Attention
 {
 	GENERATED_BODY()
+public:
+	UMainCharacterAnimInstance();
+protected:
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 private:
 	
 	AActor* OwningActor;
-
-	
 	float IKInterpSpeed = 15.0f;
 	
-
 public:
-	UMainCharacterAnimInstance();
 	UPROPERTY(BlueprintReadWrite)
 		class AMainCharacter* MainCharacter;
 	UPROPERTY(BlueprintReadWrite, Category = "Movement")
@@ -124,9 +124,7 @@ public:
 		FVector IKRightHandEffector;
 	UPROPERTY(BlueprintReadWrite, Category = "FootIK")
 		float IKHipOffset;
+	UPROPERTY()
+		UAnimNotify* FootStepNotify;
 
-	UAnimNotify* FootStepNotify;
-
-protected:
-	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 };

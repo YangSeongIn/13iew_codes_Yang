@@ -39,15 +39,13 @@ public:
 	UPROPERTY(EditAnywhere)
 		UCurveFloat* DrawerCurveFloat;
 
-	//UPROPERTY(EditAnywhere)
-	//	AInteractableItem_Key* Key;
-
 	AMainCharacter* InteractCharacter;
 	UPROPERTY(EditAnywhere)
 		class ASoundManager* SoundManager;
 
 	// Delegate
-	class UMyGameInstance* GameInstance;
+	UPROPERTY()
+		class UMyGameInstance* GameInstance;
 	UFUNCTION()
 		void Reset();
 	UFUNCTION()

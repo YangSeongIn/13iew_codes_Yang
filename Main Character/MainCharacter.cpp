@@ -274,7 +274,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("FlashLight", IE_Pressed, this, &AMainCharacter::FlashLight);
 	PlayerInputComponent->BindAction("LedgeMove", IE_Pressed, this, &AMainCharacter::LedgeMove);
 	PlayerInputComponent->BindAction("OpenKeyExplanationWidget", IE_Pressed, this, &AMainCharacter::OpenKeyExplanationWidget).bExecuteWhenPaused = true;
-	PlayerInputComponent->BindAction("CheckEdgeSlip", IE_Released, this, &AMainCharacter::CheckEdgeSlip);
 
 	PlayerInputComponent->BindAction("TestDie", IE_Pressed, this, &AMainCharacter::TestDie);
 	// Interaction
@@ -2029,10 +2028,6 @@ void AMainCharacter::OnMontageEnded(UAnimMontage* AnimMontage, bool bInterrupted
 		{
 			bIsSprinting = true;
 		}
-	}
-	else if (AnimMontage == M_EdgeSlip)
-	{
-		bIsControllable = true;
 	}
 }
 

@@ -8,8 +8,7 @@ void UHighlightableComponent::BeginPlay()
 	Super::BeginPlay();
 
 	MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	bool bCastStaticMesh = Cast<UStaticMeshComponent>(GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass()));
-	if (bCastStaticMesh)
+	if (Cast<UStaticMeshComponent>(GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass())))
 	{
 		StaticMesh = Cast<UStaticMeshComponent>(GetOwner()->GetDefaultSubobjectByName(FName(TEXT("StaticMesh"))));
 	}

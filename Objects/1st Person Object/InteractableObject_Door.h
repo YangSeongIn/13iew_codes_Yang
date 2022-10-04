@@ -86,7 +86,8 @@ public:
 	FLatentActionInfo LAI;
 
 	// Delegate
-	class UMyGameInstance* GameInstance;
+	UPROPERTY()
+		class UMyGameInstance* GameInstance;
 	UFUNCTION()
 		void Reset();
 	UFUNCTION()

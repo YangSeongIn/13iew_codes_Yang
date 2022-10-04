@@ -18,14 +18,19 @@ class CAP2_API UHighlightableComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:	
 	bool bIsOnFocus;
 	int8 DoN = 0;
 
-	class AMainCharacter* MainCharacter;
-
-	UStaticMeshComponent* StaticMesh;
-	class UCableComponent* Cable;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		UStaticMeshComponent* StaticMesh;
+	UPROPERTY()
+		class UCableComponent* Cable;
 
 	UFUNCTION()
 		void TurnOnHighlight();
@@ -35,8 +40,4 @@ public:
 	//
 	UFUNCTION()
 		void DelayFunc();
-
-protected:
-	virtual void BeginPlay() override;
-		
 };

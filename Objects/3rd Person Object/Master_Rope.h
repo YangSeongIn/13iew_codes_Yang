@@ -46,8 +46,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* StaticMesh;
-
-	IInterface_MainCharacterInfo* Interface_MainCharacterInfo;
+	UPROPERTY()
+		IInterface_MainCharacterInfo* Interface_MainCharacterInfo;
 
 	UPROPERTY()
 		class UHighlightableComponent* HightlightableComponent;

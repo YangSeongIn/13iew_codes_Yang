@@ -28,8 +28,8 @@ public:
 		USceneComponent* DefaultSceneRoot;
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* Box;
-
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 	UPROPERTY()
 		class UHighlightableComponent* HightlightableComponent;
 	UFUNCTION()

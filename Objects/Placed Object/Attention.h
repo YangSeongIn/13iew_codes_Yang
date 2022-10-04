@@ -20,8 +20,8 @@ class CAP2_API AAttention : public AActor
 	
 public:	
 	AAttention();
-
-	class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
 
 	UPROPERTY(EditAnywhere)
 		float SphereSize;

@@ -19,20 +19,30 @@ class CAP2_API UAnimNotifyState_FootStep : public UAnimNotifyState
 	GENERATED_BODY()
 public:
 	UAnimNotifyState_FootStep();
-
-	class AMainCharacter* MainCharacter;
-
-	USoundCue* ConcreteSoundCue;
-	USoundCue* CarpetSoundCue;
-	USoundCue* WoodSoundCue;
-	USoundCue* GrassSoundCue;
-	USoundCue* GravelSoundCue;
-	USoundCue* GroundSoundCue;
-	USoundCue* MetalSoundCue;
-	USoundCue* PlasticSoundCue;
-	USoundCue* SandSoundCue;
-	USoundCue* SnowSoundCue;
-	USoundCue* WaterSoundCue;
+	UPROPERTY()
+		class AMainCharacter* MainCharacter;
+	UPROPERTY()
+		USoundCue* ConcreteSoundCue;
+	UPROPERTY()
+		USoundCue* CarpetSoundCue;
+	UPROPERTY()
+		USoundCue* WoodSoundCue;
+	UPROPERTY()
+		USoundCue* GrassSoundCue;
+	UPROPERTY()
+		USoundCue* GravelSoundCue;
+	UPROPERTY()
+		USoundCue* GroundSoundCue;
+	UPROPERTY()
+		USoundCue* MetalSoundCue;
+	UPROPERTY()
+		USoundCue* PlasticSoundCue;
+	UPROPERTY()
+		USoundCue* SandSoundCue;
+	UPROPERTY()
+		USoundCue* SnowSoundCue;
+	UPROPERTY()
+		USoundCue* WaterSoundCue;
 public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
 };

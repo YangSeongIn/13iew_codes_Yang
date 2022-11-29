@@ -1,5 +1,5 @@
 ## 📌관련 영상
-: https://www.youtube.com/watch?v=p8V7mc-i5Kw
+: https://www.youtube.com/watch?v=p8V7mc-i5Kw  
 : https://www.youtube.com/watch?v=ZA3Xx2ysUng
 
 ## 📌Intro
